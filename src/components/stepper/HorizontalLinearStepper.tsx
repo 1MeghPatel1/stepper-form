@@ -13,6 +13,8 @@ import ProfessionalDetails from "../forms/ProfessionalDetails";
 import ExperienceDetails from "../forms/ExperienceDetails";
 import CurrentOrganizationDetails from "../forms/CurrentOrganizationDetails";
 import { styled } from "@mui/material";
+import { initialSatateType } from "../forms/types/types";
+import { initialState } from "../forms/types/initialState";
 
 const steps = [
 	"Personal Details",
@@ -29,8 +31,8 @@ const StyledLabel = styled(StepLabel)({
 });
 
 export default function HorizontalLinearStepper() {
-	const [activeStep, setActiveStep] = React.useState(0);
-	const [data, setData] = React.useState<object[]>([]);
+	const [activeStep, setActiveStep] = React.useState(5);
+	const [data, setData] = React.useState<initialSatateType>(initialState);
 
 	console.log(data);
 
@@ -72,6 +74,7 @@ export default function HorizontalLinearStepper() {
 								setActiveStep={setActiveStep}
 								steps={steps}
 								setData={setData}
+								data={data}
 							/>
 						)}
 						{activeStep === 1 && (
@@ -79,12 +82,46 @@ export default function HorizontalLinearStepper() {
 								activeStep={activeStep}
 								setActiveStep={setActiveStep}
 								steps={steps}
+								setData={setData}
+								data={data}
 							/>
 						)}
-						{activeStep === 2 && <ProfessionalDetails />}
-						{activeStep === 3 && <EducationDetails />}
-						{activeStep === 4 && <ExperienceDetails />}
-						{activeStep === 5 && <CurrentOrganizationDetails />}
+						{activeStep === 2 && (
+							<ProfessionalDetails
+								activeStep={activeStep}
+								setActiveStep={setActiveStep}
+								steps={steps}
+								setData={setData}
+								data={data}
+							/>
+						)}
+						{activeStep === 3 && (
+							<EducationDetails
+								activeStep={activeStep}
+								setActiveStep={setActiveStep}
+								steps={steps}
+								setData={setData}
+								data={data}
+							/>
+						)}
+						{activeStep === 4 && (
+							<ExperienceDetails
+								activeStep={activeStep}
+								setActiveStep={setActiveStep}
+								steps={steps}
+								setData={setData}
+								data={data}
+							/>
+						)}
+						{activeStep === 5 && (
+							<CurrentOrganizationDetails
+								activeStep={activeStep}
+								setActiveStep={setActiveStep}
+								steps={steps}
+								setData={setData}
+								data={data}
+							/>
+						)}
 					</Box>
 				</React.Fragment>
 			)}

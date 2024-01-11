@@ -2,11 +2,17 @@ import { Box, Button } from "@mui/material";
 
 type propsType = {
 	handleBack: () => void;
+	handleNext?: () => void;
 	activeStep: number;
 	steps: string[];
 };
 
-const NavigationButtons = ({ handleBack, activeStep, steps }: propsType) => {
+const NavigationButtons = ({
+	handleBack,
+	activeStep,
+	steps,
+	handleNext,
+}: propsType) => {
 	return (
 		<Box
 			sx={{
@@ -26,9 +32,22 @@ const NavigationButtons = ({ handleBack, activeStep, steps }: propsType) => {
 				Back
 			</Button>
 			<Box sx={{ flex: "1 1 auto" }} />
-			<Button type="submit" color="primary" variant="contained">
-				{activeStep === steps.length - 1 ? "Finish" : "Next"}
-			</Button>
+
+			{!handleNext && (
+				<Button type="submit" color="primary" variant="contained">
+					{activeStep === steps.length - 1 ? "Finish" : "Next"}
+				</Button>
+			)}
+			{handleNext && (
+				<Button
+					type="submit"
+					color="primary"
+					variant="contained"
+					onClick={handleNext}
+				>
+					{activeStep === steps.length - 1 ? "Finish" : "Next"}
+				</Button>
+			)}
 		</Box>
 	);
 };

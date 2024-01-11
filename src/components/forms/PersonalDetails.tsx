@@ -10,7 +10,6 @@ import {
 	Typography,
 	styled,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { pxToRem } from "./../../utils/helper";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -21,30 +20,30 @@ import { FormikValues, useFormik } from "formik";
 import validationSchema from "./schemas/personalDetailsSchema";
 import NavigationButtons from "../stepper/NavigationButtons";
 import CloseIcon from "@mui/icons-material/Close";
-import { personaldataType } from "./types";
+import { personaldataType, propsType } from "./types/types";
+import { useState } from "react";
 
 const StyledTextField = styled(TextField)({
 	width: `${pxToRem(400)}rem`,
 	backgroundColor: "transparent",
 });
 
-type propsType = {
-	setActiveStep: Dispatch<SetStateAction<number>>;
-	activeStep: number;
-	steps: string[];
-	setData: Dispatch<SetStateAction<object[]>>;
-};
-
 const PersonalDetails = ({
 	setActiveStep,
 	activeStep,
 	steps,
 	setData,
+	data,
 }: propsType) => {
 	const handleNext = (values: FormikValues) => {
-		const newData = { ...values, dateOfBirth: values.dateOfBirth.toDate() };
+		const newData = {
+			...values,
+			dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"),
+		} as personaldataType;
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-		setData((data) => [...data, newData]);
+		setData((data) => {
+			return { ...data, personalDetails: newData };
+		});
 	};
 
 	const handleBack = () => {
@@ -69,15 +68,30 @@ const PersonalDetails = ({
 		setFieldValue,
 	} = useFormik<personaldataType>({
 		initialValues: {
-			firstName: "",
-			middleName: "",
-			lastName: "",
-			email: "",
-			mobile: "",
-			dateOfBirth: dayjs(new Date().toISOString()),
-			presentAdd: "",
-			permenantAdd: "",
-			imgFile: null,
+			firstName: data.personalDetails.firstName
+				? data.personalDetails.firstName
+				: "",
+			middleName: data.personalDetails.middleName
+				? data.personalDetails.middleName
+				: "",
+			lastName: data.personalDetails.lastName
+				? data.personalDetails.lastName
+				: "",
+			email: data.personalDetails.email ? data.personalDetails.email : "",
+			mobile: data.personalDetails.mobile ? data.personalDetails.mobile : "",
+			dateOfBirth:
+				data.personalDetails.dateOfBirth !== ""
+					? dayjs(data.personalDetails.dateOfBirth)
+					: dayjs(new Date()).subtract(18, "year"),
+			presentAdd: data.personalDetails.presentAdd
+				? data.personalDetails.presentAdd
+				: "",
+			permenantAdd: data.personalDetails.permenantAdd
+				? data.personalDetails.permenantAdd
+				: "",
+			imgFile: data.personalDetails.imgFile
+				? data.personalDetails.imgFile
+				: null,
 		},
 		validationSchema: validationSchema,
 		onSubmit: handleNext,
@@ -89,8 +103,6 @@ const PersonalDetails = ({
 	};
 
 	const imgInput = document.querySelector("#imgInput") as HTMLInputElement;
-
-	console.log(values);
 
 	return (
 		<Stack
@@ -108,15 +120,20 @@ const PersonalDetails = ({
 				noValidate
 				autoComplete="off"
 				onSubmit={handleSubmit}
-				direction="column"
 				spacing={3}
-				sx={{ width: "90%", marginTop: "25px" }}
+				sx={{
+					width: "90%",
+					marginTop: "25px",
+					flexDirection: { xs: "column" },
+				}}
 			>
 				<Stack
 					component="div"
-					direction="row"
-					spacing={3}
+					// direction="row"
 					justifyContent="space-between"
+					sx={{
+						flexDirection: { xs: "column", sm: "row" },
+					}}
 				>
 					<StyledTextField
 						id="firstName"
@@ -151,9 +168,11 @@ const PersonalDetails = ({
 				</Stack>
 				<Stack
 					component="div"
-					direction="row"
-					spacing={3}
+					// direction="row"
 					justifyContent="space-between"
+					sx={{
+						flexDirection: { xs: "column", sm: "row" },
+					}}
 				>
 					<StyledTextField
 						id="email"
@@ -188,12 +207,14 @@ const PersonalDetails = ({
 									variant: "standard",
 									error: touched?.dateOfBirth && Boolean(errors.dateOfBirth),
 									helperText:
-										(touched?.dateOfBirth && errors?.dateOfBirth + "") ?? "",
-									onChange: handleChange,
+										touched?.dateOfBirth && errors?.dateOfBirth + "" && "",
 								},
 							}}
+							onChange={(newValue): void => {
+								setFieldValue("dateOfBirth", newValue);
+							}}
 							value={values.dateOfBirth}
-							disableFuture
+							maxDate={dayjs(new Date().toISOString()).subtract(18, "year")}
 						/>
 					</LocalizationProvider>
 				</Stack>
@@ -252,9 +273,12 @@ const PersonalDetails = ({
 				</Stack>
 				<Stack
 					component="div"
-					direction="row"
-					spacing={3}
+					// direction="row"
 					justifyContent="space-between"
+					sx={{
+						flexDirection: { xs: "column", sm: "row" },
+						gap: 3,
+					}}
 				>
 					<TextField
 						id="presentAdd"
