@@ -17,15 +17,15 @@ const validationSchema = yup.object().shape({
 		.string()
 		.email("Enter a valid email")
 		.required("Email is Required"),
-	mobile: yup
+	mobileNo: yup
 		.string()
-		.matches(/^[6-9]\d{9}$/, "Please enter valid Mobile Number")
-		.required("Mobile Number is Required"),
-	presentAdd: yup
+		.matches(/^[6-9]\d{9}$/, "Please enter valid mobileNo Number")
+		.required("mobileNo Number is Required"),
+	presentAddress: yup
 		.string()
 		.min(5, "Present Address must be greater than 5 letters")
 		.required("Present Address is Required"),
-	permenantAdd: yup
+	permenantAddress: yup
 		.string()
 		.min(5, "Permenant Address must be greater than 5 letters")
 		.required("Permenant Address is Required"),

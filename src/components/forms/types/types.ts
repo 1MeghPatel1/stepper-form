@@ -6,20 +6,20 @@ export type personaldataType = {
 	middleName: string;
 	lastName: string;
 	email: string;
-	mobile: string;
+	mobileNo: string;
 	dateOfBirth: string | dayjs.Dayjs;
-	presentAdd: string;
-	permenantAdd: string;
-	imgFile: null | File;
+	presentAddress: string;
+	permenantAddress: string;
+	profileImage: null | File;
 };
 
 export type bankDataType = {
 	bankName: string;
 	accountName: string;
 	accountNumber: string;
-	ifscCode: string;
-	aadharCardNumber: string;
-	panCardNumber: string;
+	IFSCCode: string;
+	aadhaarNumber: string;
+	panNumber: string;
 };
 
 export type professionalDataType = {
@@ -29,7 +29,7 @@ export type professionalDataType = {
 	currentLocation: string;
 	years: string;
 	months: string;
-	resume: null | File;
+	uploadedResume: null | File;
 };
 
 export type EducationDataRow = {

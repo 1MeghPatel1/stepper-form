@@ -35,7 +35,7 @@ const NavigationButtons = ({
 
 			{!handleNext && (
 				<Button type="submit" color="primary" variant="contained">
-					{activeStep === steps.length - 1 ? "Finish" : "Next"}
+					{activeStep === steps.length - 1 ? "Submit" : "Next"}
 				</Button>
 			)}
 			{handleNext && (
@@ -45,7 +45,7 @@ const NavigationButtons = ({
 					variant="contained"
 					onClick={handleNext}
 				>
-					{activeStep === steps.length - 1 ? "Finish" : "Next"}
+					{activeStep === steps.length - 1 ? "Submit" : "Next"}
 				</Button>
 			)}
 		</Box>

@@ -20,7 +20,8 @@ const CurrentOrganizationDetails = ({
 	steps,
 	setData,
 	data,
-}: propsType) => {
+	handleDataSubmit,
+}: propsType & { handleDataSubmit: () => void }) => {
 	const handleNext = (values: FormikValues) => {
 		const newData = {
 			...values,
@@ -32,6 +33,8 @@ const CurrentOrganizationDetails = ({
 		setData((data) => {
 			return { ...data, currentOrganizationDetails: newData };
 		});
+		console.log(data);
+		handleDataSubmit();
 	};
 
 	const handleBack = () => {

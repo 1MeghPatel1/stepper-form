@@ -78,19 +78,21 @@ const PersonalDetails = ({
 				? data.personalDetails.lastName
 				: "",
 			email: data.personalDetails.email ? data.personalDetails.email : "",
-			mobile: data.personalDetails.mobile ? data.personalDetails.mobile : "",
+			mobileNo: data.personalDetails.mobileNo
+				? data.personalDetails.mobileNo
+				: "",
 			dateOfBirth:
 				data.personalDetails.dateOfBirth !== ""
 					? dayjs(data.personalDetails.dateOfBirth)
 					: dayjs(new Date()).subtract(18, "year"),
-			presentAdd: data.personalDetails.presentAdd
-				? data.personalDetails.presentAdd
+			presentAddress: data.personalDetails.presentAddress
+				? data.personalDetails.presentAddress
 				: "",
-			permenantAdd: data.personalDetails.permenantAdd
-				? data.personalDetails.permenantAdd
+			permenantAddress: data.personalDetails.permenantAddress
+				? data.personalDetails.permenantAddress
 				: "",
-			imgFile: data.personalDetails.imgFile
-				? data.personalDetails.imgFile
+			profileImage: data.personalDetails.profileImage
+				? data.personalDetails.profileImage
 				: null,
 		},
 		validationSchema: validationSchema,
@@ -98,7 +100,7 @@ const PersonalDetails = ({
 	});
 
 	const handleRemoveClick = () => {
-		setFieldValue("imgFile", null);
+		setFieldValue("profileImage", null);
 		setImgUrl("");
 	};
 
@@ -185,14 +187,14 @@ const PersonalDetails = ({
 						helperText={touched.email && errors.email}
 					/>
 					<StyledTextField
-						id="mobile"
+						id="mobileNo"
 						label="Mobile Number"
 						variant="standard"
-						value={values.mobile}
+						value={values.mobileNo}
 						onChange={handleChange}
 						onBlur={handleBlur}
-						error={touched.mobile && Boolean(errors.mobile)}
-						helperText={touched.mobile && errors.mobile}
+						error={touched.mobileNo && Boolean(errors.mobileNo)}
+						helperText={touched.mobileNo && errors.mobileNo}
 					/>
 					<LocalizationProvider
 						dateAdapter={AdapterDayjs}
@@ -229,10 +231,10 @@ const PersonalDetails = ({
 							id="imgInput"
 							accept="image/*"
 							type="file"
-							name="imgFile"
+							name="profileImage"
 							onChange={(e) => {
 								const file = e.target.files?.[0] as File;
-								setFieldValue("imgFile", file);
+								setFieldValue("profileImage", file);
 								setImgUrl(URL.createObjectURL(file));
 								if (imgInput) {
 									imgInput.value = "";
@@ -241,7 +243,7 @@ const PersonalDetails = ({
 							hidden
 						/>
 					</Button>
-					{values.imgFile && (
+					{values.profileImage && (
 						<Box sx={{ position: "relative", width: "max-content" }}>
 							<Button
 								variant="outlined"
@@ -251,7 +253,7 @@ const PersonalDetails = ({
 								}}
 								onClick={handleOpen}
 							>
-								{values?.imgFile?.name}
+								{values?.profileImage?.name}
 							</Button>
 							<Fab
 								sx={{
@@ -281,30 +283,32 @@ const PersonalDetails = ({
 					}}
 				>
 					<TextField
-						id="presentAdd"
+						id="presentAddress"
 						label="Present Address"
 						variant="standard"
 						fullWidth
 						multiline
 						rows={4}
-						value={values.presentAdd}
+						value={values.presentAddress}
 						onChange={handleChange}
 						onBlur={handleBlur}
-						error={touched.presentAdd && Boolean(errors.presentAdd)}
-						helperText={touched.presentAdd && errors.presentAdd}
+						error={touched.presentAddress && Boolean(errors.presentAddress)}
+						helperText={touched.presentAddress && errors.presentAddress}
 					/>
 					<TextField
-						id="permenantAdd"
+						id="permenantAddress"
 						label="Permenant Address"
 						variant="standard"
 						fullWidth
 						multiline
 						rows={4}
-						value={sameAddChecked ? values.presentAdd : values.permenantAdd}
+						value={
+							sameAddChecked ? values.presentAddress : values.permenantAddress
+						}
 						onChange={handleChange}
 						onBlur={handleBlur}
-						error={touched.permenantAdd && Boolean(errors.permenantAdd)}
-						helperText={touched.permenantAdd && errors.permenantAdd}
+						error={touched.permenantAddress && Boolean(errors.permenantAddress)}
+						helperText={touched.permenantAddress && errors.permenantAddress}
 					/>
 				</Stack>
 				<FormControlLabel
@@ -313,7 +317,7 @@ const PersonalDetails = ({
 						<Checkbox
 							onChange={() => {
 								setSameAddChecked((prev) => !prev);
-								setFieldValue("permenantAdd", values.presentAdd);
+								setFieldValue("permenantAddress", values.presentAddress);
 							}}
 						/>
 					}

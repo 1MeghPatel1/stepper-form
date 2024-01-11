@@ -55,14 +55,14 @@ const ProfessionalDetails = ({
 	};
 
 	const handleOpen = () => {
-		window.open(resumeUrl);
+		window.open(uploadedResumeUrl);
 	};
 
 	const handleRemoveClick = () => {
-		setFieldValue("resume", null);
+		setFieldValue("uploadedResume", null);
 	};
 
-	const [resumeUrl, setResumeUrl] = useState("");
+	const [uploadedResumeUrl, setuploadedResumeUrl] = useState("");
 
 	const {
 		values,
@@ -80,14 +80,14 @@ const ProfessionalDetails = ({
 			currentLocation: "",
 			years: "",
 			months: "",
-			resume: null,
+			uploadedResume: null,
 		},
 		validationSchema: validationSchema,
 		onSubmit: handleNext,
 	});
 
-	const resumeInput = document.querySelector(
-		"#resumeInput"
+	const uploadedResumeInput = document.querySelector(
+		"#uploadedResumeInput"
 	) as HTMLInputElement;
 
 	return (
@@ -261,22 +261,22 @@ const ProfessionalDetails = ({
 							>
 								Upload Resume
 								<input
-									id="resumeInput"
+									id="uploadedResumeInput"
 									accept="application/pdf"
 									type="file"
-									name="resumeFile"
+									name="uploadedResumeFile"
 									onChange={(e) => {
 										const file = e.target.files?.[0] as File;
-										setFieldValue("resume", file);
-										setResumeUrl(URL.createObjectURL(file));
-										if (resumeInput) {
-											resumeInput.value = "";
+										setFieldValue("uploadedResume", file);
+										setuploadedResumeUrl(URL.createObjectURL(file));
+										if (uploadedResumeInput) {
+											uploadedResumeInput.value = "";
 										}
 									}}
 									hidden
 								/>
 							</Button>
-							{values.resume && (
+							{values.uploadedResume && (
 								<Box sx={{ position: "relative", width: "max-content" }}>
 									<Button
 										variant="outlined"
@@ -286,7 +286,7 @@ const ProfessionalDetails = ({
 										}}
 										onClick={handleOpen}
 									>
-										{values?.resume?.name}
+										{values?.uploadedResume?.name}
 									</Button>
 									<Fab
 										sx={{

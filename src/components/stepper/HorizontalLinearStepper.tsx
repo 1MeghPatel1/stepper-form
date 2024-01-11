@@ -12,9 +12,12 @@ import EducationDetails from "../forms/EducationDetails";
 import ProfessionalDetails from "../forms/ProfessionalDetails";
 import ExperienceDetails from "../forms/ExperienceDetails";
 import CurrentOrganizationDetails from "../forms/CurrentOrganizationDetails";
-import { styled } from "@mui/material";
+import { Stack, styled } from "@mui/material";
 import { initialSatateType } from "../forms/types/types";
 import { initialState } from "../forms/types/initialState";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { postFormEntry } from "../../services/apiServices";
 
 const steps = [
 	"Personal Details",
@@ -31,13 +34,37 @@ const StyledLabel = styled(StepLabel)({
 });
 
 export default function HorizontalLinearStepper() {
-	const [activeStep, setActiveStep] = React.useState(5);
+	const [activeStep, setActiveStep] = React.useState(2);
 	const [data, setData] = React.useState<initialSatateType>(initialState);
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	console.log(data);
 
-	const handleReset = () => {
-		setActiveStep(0);
+	const mutation = useMutation({
+		mutationFn: postFormEntry,
+		onSuccess: () => {
+			// Invalidate and refetch
+			console.log("successfull");
+			queryClient.invalidateQueries({ queryKey: ["formEntries"] });
+			setActiveStep(0);
+			navigate("/");
+		},
+		onError: (err) => {
+			console.log(err);
+		},
+	});
+
+	const handleSubmit = async () => {
+		// const formData = new FormData();
+
+		// type keyType = keyof initialSatateType;
+		// let key: keyType;
+		// for (key in data) {
+		// 	formData.append(key, data[key]);
+		// }
+
+		mutation.mutate(data);
 	};
 
 	return (
@@ -56,15 +83,29 @@ export default function HorizontalLinearStepper() {
 				})}
 			</Stepper>
 			{activeStep === steps.length ? (
-				<React.Fragment>
-					<Typography sx={{ mt: 2, mb: 1 }}>
-						All steps completed - you&apos;re finished
-					</Typography>
-					<Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-						<Box sx={{ flex: "1 1 auto" }} />
-						<Button onClick={handleReset}>Reset</Button>
-					</Box>
-				</React.Fragment>
+				<Stack justifyContent="center" alignItems="center" minHeight="30rem">
+					<Stack
+						bgcolor="rgb(220, 220, 220)"
+						width="40%"
+						justifyContent="center"
+						alignItems="center"
+						p={5}
+						borderRadius={5}
+						spacing={3}
+					>
+						<Typography>
+							All Steps Completed - Navigate Back to Home Page
+						</Typography>
+						<Button
+							variant="contained"
+							onClick={() => {
+								navigate("/");
+							}}
+						>
+							Back To Home
+						</Button>
+					</Stack>
+				</Stack>
 			) : (
 				<React.Fragment>
 					<Box>
@@ -120,6 +161,7 @@ export default function HorizontalLinearStepper() {
 								steps={steps}
 								setData={setData}
 								data={data}
+								handleDataSubmit={handleSubmit}
 							/>
 						)}
 					</Box>

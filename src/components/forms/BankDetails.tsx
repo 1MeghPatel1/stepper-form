@@ -38,13 +38,11 @@ const BankDetails = ({
 				accountNumber: data.bankDetails.accountNumber
 					? data.bankDetails.accountNumber
 					: "",
-				ifscCode: data.bankDetails.ifscCode ? data.bankDetails.ifscCode : "",
-				aadharCardNumber: data.bankDetails.aadharCardNumber
-					? data.bankDetails.aadharCardNumber
+				IFSCCode: data.bankDetails.IFSCCode ? data.bankDetails.IFSCCode : "",
+				aadhaarNumber: data.bankDetails.aadhaarNumber
+					? data.bankDetails.aadhaarNumber
 					: "",
-				panCardNumber: data.bankDetails.panCardNumber
-					? data.bankDetails.panCardNumber
-					: "",
+				panNumber: data.bankDetails.panNumber ? data.bankDetails.panNumber : "",
 			},
 			validationSchema: validationSchema,
 			onSubmit: handleNext,
@@ -108,16 +106,14 @@ const BankDetails = ({
 							helperText={touched.accountNumber && errors.accountNumber}
 						/>
 						<StyledTextField
-							id="aadharCardNumber"
+							id="aadhaarNumber"
 							label="Aadhar Card Number"
 							variant="standard"
-							value={values.aadharCardNumber}
+							value={values.aadhaarNumber}
 							onChange={handleChange}
 							onBlur={handleBlur}
-							error={
-								touched.aadharCardNumber && Boolean(errors.aadharCardNumber)
-							}
-							helperText={touched.aadharCardNumber && errors.aadharCardNumber}
+							error={touched.aadhaarNumber && Boolean(errors.aadhaarNumber)}
+							helperText={touched.aadhaarNumber && errors.aadhaarNumber}
 						/>
 					</Stack>
 					<Stack
@@ -137,24 +133,24 @@ const BankDetails = ({
 							helperText={touched.accountName && errors.accountName}
 						/>
 						<StyledTextField
-							id="ifscCode"
+							id="IFSCCode"
 							label="IFSC Code"
 							variant="standard"
-							value={values.ifscCode}
+							value={values.IFSCCode}
 							onChange={handleChange}
 							onBlur={handleBlur}
-							error={touched.ifscCode && Boolean(errors.ifscCode)}
-							helperText={touched.ifscCode && errors.ifscCode}
+							error={touched.IFSCCode && Boolean(errors.IFSCCode)}
+							helperText={touched.IFSCCode && errors.IFSCCode}
 						/>
 						<StyledTextField
-							id="panCardNumber"
+							id="panNumber"
 							label="Pan Card Number"
 							variant="standard"
-							value={values.panCardNumber}
+							value={values.panNumber}
 							onChange={handleChange}
 							onBlur={handleBlur}
-							error={touched.panCardNumber && Boolean(errors.panCardNumber)}
-							helperText={touched.panCardNumber && errors.panCardNumber}
+							error={touched.panNumber && Boolean(errors.panNumber)}
+							helperText={touched.panNumber && errors.panNumber}
 						/>
 					</Stack>
 				</Stack>
