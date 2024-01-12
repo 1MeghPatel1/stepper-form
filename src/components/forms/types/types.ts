@@ -1,6 +1,11 @@
 import dayjs from "dayjs";
 import { Dispatch, SetStateAction } from "react";
 
+export type imgDataType = {
+	name: string;
+	src: string;
+};
+
 export type personaldataType = {
 	firstName: string;
 	middleName: string;
@@ -10,7 +15,11 @@ export type personaldataType = {
 	dateOfBirth: string | dayjs.Dayjs;
 	presentAddress: string;
 	permenantAddress: string;
-	profileImage: null | File;
+	profileImage: null | MediaSource | imgDataType;
+};
+
+export type personalDetailsType = Omit<personaldataType, "profileImage"> & {
+	profileImage: null | imgDataType;
 };
 
 export type bankDataType = {
@@ -27,8 +36,8 @@ export type professionalDataType = {
 	department: string;
 	skills: never[];
 	currentLocation: string;
-	years: string;
-	months: string;
+	years: number | null;
+	months: number | null;
 	uploadedResume: null | File;
 };
 
@@ -59,7 +68,7 @@ export type currentOrganizationDetailsType = {
 };
 
 export type initialSatateType = {
-	personalDetails: personaldataType;
+	personalDetails: personalDetailsType;
 	bankDetails: bankDataType;
 	professionalDetails: professionalDataType;
 	educationDetails: educationDetailsType[];
@@ -73,7 +82,7 @@ export type propsType = {
 	steps: string[];
 	setData: Dispatch<
 		SetStateAction<{
-			personalDetails: personaldataType;
+			personalDetails: personalDetailsType;
 			bankDetails: bankDataType;
 			professionalDetails: professionalDataType;
 			educationDetails: educationDetailsType[];
@@ -81,8 +90,9 @@ export type propsType = {
 			currentOrganizationDetails: currentOrganizationDetailsType;
 		}>
 	>;
+	setIsForwardAnimation: Dispatch<SetStateAction<boolean>>;
 	data: {
-		personalDetails: personaldataType;
+		personalDetails: personalDetailsType;
 		bankDetails: bankDataType;
 		professionalDetails: professionalDataType;
 		educationDetails: educationDetailsType[];

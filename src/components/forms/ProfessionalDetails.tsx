@@ -42,16 +42,27 @@ const ProfessionalDetails = ({
 	activeStep,
 	steps,
 	setData,
+	setIsForwardAnimation,
+	data,
 }: propsType) => {
 	const handleNext = (values: professionalDataType) => {
+		const newData = {
+			...values,
+			uploadedResume: values.uploadedResume || "",
+		} as professionalDataType;
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 		setData((data) => {
-			return { ...data, professionalDetails: values };
+			return {
+				...data,
+				professionalDetails: newData,
+			};
 		});
+		setIsForwardAnimation(true);
 	};
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+		setIsForwardAnimation(false);
 	};
 
 	const handleOpen = () => {
@@ -74,13 +85,27 @@ const ProfessionalDetails = ({
 		setFieldValue,
 	} = useFormik<professionalDataType>({
 		initialValues: {
-			designation: "",
-			department: "",
-			skills: [],
-			currentLocation: "",
-			years: "",
-			months: "",
-			uploadedResume: null,
+			designation: data.professionalDetails.designation
+				? data.professionalDetails.designation
+				: "",
+			department: data.professionalDetails.department
+				? data.professionalDetails.department
+				: "",
+			skills: data.professionalDetails.skills
+				? data.professionalDetails.skills
+				: [],
+			currentLocation: data.professionalDetails.currentLocation
+				? data.professionalDetails.currentLocation
+				: "",
+			years: data.professionalDetails.years
+				? data.professionalDetails.years
+				: null,
+			months: data.professionalDetails.months
+				? data.professionalDetails.months
+				: null,
+			uploadedResume: data.professionalDetails.uploadedResume
+				? data.professionalDetails.uploadedResume
+				: null,
 		},
 		validationSchema: validationSchema,
 		onSubmit: handleNext,
@@ -166,6 +191,7 @@ const ProfessionalDetails = ({
 							onChange={(_, newValue) => {
 								setFieldValue("skills", newValue);
 							}}
+							value={values.skills}
 							renderOption={(props, option, { selected }) => (
 								<li {...props}>
 									<Checkbox
@@ -220,6 +246,7 @@ const ProfessionalDetails = ({
 								onChange={(_, newValue) => {
 									setFieldValue("years", newValue);
 								}}
+								value={values.years}
 								renderInput={(params) => (
 									<TextField
 										{...params}
@@ -241,6 +268,7 @@ const ProfessionalDetails = ({
 								onChange={(_, newValue) => {
 									setFieldValue("months", newValue);
 								}}
+								value={values.months}
 								renderInput={(params) => (
 									<TextField
 										{...params}

@@ -20,8 +20,9 @@ import { FormikValues, useFormik } from "formik";
 import validationSchema from "./schemas/personalDetailsSchema";
 import NavigationButtons from "../stepper/NavigationButtons";
 import CloseIcon from "@mui/icons-material/Close";
-import { personaldataType, propsType } from "./types/types";
-import { useState } from "react";
+import { imgDataType, propsType, personalDetailsType } from "./types/types";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const StyledTextField = styled(TextField)({
 	width: `${pxToRem(400)}rem`,
@@ -34,23 +35,34 @@ const PersonalDetails = ({
 	steps,
 	setData,
 	data,
+	setIsForwardAnimation,
 }: propsType) => {
 	const handleNext = (values: FormikValues) => {
 		const newData = {
 			...values,
 			dateOfBirth: values.dateOfBirth.format("YYYY-MM-DD"),
-		} as personaldataType;
+			profileImage: values.profileImage || "",
+		} as personalDetailsType;
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 		setData((data) => {
 			return { ...data, personalDetails: newData };
 		});
+		setIsForwardAnimation(true);
 	};
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+		setIsForwardAnimation(false);
 	};
 
 	const [imgUrl, setImgUrl] = useState("");
+	const params = useParams();
+
+	useEffect(() => {
+		if (params.id) {
+			setImgUrl(data.personalDetails.profileImage!.src);
+		}
+	}, [params, data]);
 
 	const [sameAddChecked, setSameAddChecked] = useState(false);
 	const [open, setOpen] = useState(false);
@@ -66,7 +78,7 @@ const PersonalDetails = ({
 		errors,
 		touched,
 		setFieldValue,
-	} = useFormik<personaldataType>({
+	} = useFormik({
 		initialValues: {
 			firstName: data.personalDetails.firstName
 				? data.personalDetails.firstName
@@ -92,7 +104,7 @@ const PersonalDetails = ({
 				? data.personalDetails.permenantAddress
 				: "",
 			profileImage: data.personalDetails.profileImage
-				? data.personalDetails.profileImage
+				? (data.personalDetails.profileImage as imgDataType)
 				: null,
 		},
 		validationSchema: validationSchema,
@@ -234,7 +246,10 @@ const PersonalDetails = ({
 							name="profileImage"
 							onChange={(e) => {
 								const file = e.target.files?.[0] as File;
-								setFieldValue("profileImage", file);
+								setFieldValue("profileImage", {
+									name: file.name,
+									src: URL.createObjectURL(file),
+								});
 								setImgUrl(URL.createObjectURL(file));
 								if (imgInput) {
 									imgInput.value = "";

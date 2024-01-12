@@ -16,16 +16,19 @@ const BankDetails = ({
 	steps,
 	setData,
 	data,
+	setIsForwardAnimation,
 }: propsType) => {
 	const handleNext = (values: bankDataType) => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 		setData((data) => {
 			return { ...data, bankDetails: values };
 		});
+		setIsForwardAnimation(true);
 	};
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+		setIsForwardAnimation(false);
 	};
 
 	const { values, handleSubmit, handleChange, handleBlur, errors, touched } =

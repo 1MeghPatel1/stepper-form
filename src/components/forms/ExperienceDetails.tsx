@@ -56,6 +56,7 @@ const ExperienceDetails = ({
 	steps,
 	setData,
 	data,
+	setIsForwardAnimation,
 }: propsType) => {
 	//initial table data
 	const initialTableData =
@@ -105,9 +106,11 @@ const ExperienceDetails = ({
 			};
 		});
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
+		setIsForwardAnimation(true);
 	};
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+		setIsForwardAnimation(false);
 	};
 
 	//formik initial values

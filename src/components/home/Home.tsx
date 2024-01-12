@@ -7,29 +7,62 @@ import {
 	Stack,
 	Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import DataTable from "react-data-table-component";
-import { Link } from "react-router-dom";
-import { getFormEntries } from "../../services/apiServices";
+import { Link, useNavigate } from "react-router-dom";
+// import { getFormEntries } from "../../services/apiServices";
 import DescriptionIcon from "@mui/icons-material/Description";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useEffect, useState } from "react";
+import {
+	deleteFormEntry,
+	formEntryType,
+	getAllFormEntries,
+} from "../../services/localHostServices";
 
 const Home = () => {
-	const query = useQuery({
-		queryKey: ["formEntries"],
-		queryFn: getFormEntries,
-	});
+	// const query = useQuery({
+	// 	queryKey: ["formEntries"],
+	// 	queryFn: getFormEntries,
+	// });
 
-	console.log(query);
-	console.log(query.data);
+	// console.log(query);
+	// console.log(query.data);
+	const [data, setData] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		setTimeout(() => {
+			setIsLoading(false);
+			const allFormEntries = JSON.parse(
+				localStorage.getItem("allFormEntries")!
+			);
+			console.log(allFormEntries);
+			if (allFormEntries?.length > 0) {
+				setData(allFormEntries);
+				setIsLoading(false);
+			}
+		}, 1000);
+	}, []);
 
 	const columns = [
 		{
 			name: "Profile Picture",
-			cell: (row: any) => (
-				<Avatar alt="Cindy Baker" src={row.personalData.profileImage} />
-			),
+			cell: (row: formEntryType) => {
+				console.log(row);
+				return (
+					<Avatar
+						alt="Cindy Baker"
+						src={
+							row.formData.personalDetails.profileImage!.src
+								? row.formData.personalDetails.profileImage!.src
+								: ""
+						}
+					/>
+				);
+			},
 			style: {
 				minWidth: "5rem",
 			},
@@ -37,38 +70,44 @@ const Home = () => {
 		},
 		{
 			name: "Name",
-			cell: (row: any) => (
+			cell: (row: formEntryType) => (
 				<Typography variant="body1">
-					{row.personalData.firstName + " " + row.personalData.lastName}
+					{row.formData.personalDetails.firstName +
+						" " +
+						row.formData.personalDetails.lastName}
 				</Typography>
 			),
 		},
 		{
 			name: "Department",
-			cell: (row: any) => (
+			cell: (row: formEntryType) => (
 				<Typography variant="body1">
-					{row.professionalData.department}
+					{row.formData.professionalDetails.department}
 				</Typography>
 			),
 		},
 		{
 			name: "Designation",
-			cell: (row: any) => (
+			cell: (row: formEntryType) => (
 				<Typography variant="body1">
-					{row.professionalData.designation}
+					{row.formData.professionalDetails.designation}
 				</Typography>
 			),
 		},
 		{
 			name: "Email",
-			cell: (row: any) => (
-				<Typography variant="body1">{row.personalData.email}</Typography>
+			cell: (row: formEntryType) => (
+				<Typography variant="body1">
+					{row.formData.personalDetails.email}
+				</Typography>
 			),
 		},
 		{
 			name: "Mobile Number",
-			cell: (row: any) => (
-				<Typography variant="body1">{row.personalData.mobileNo}</Typography>
+			cell: (row: formEntryType) => (
+				<Typography variant="body1">
+					{row.formData.personalDetails.mobileNo}
+				</Typography>
 			),
 		},
 		{
@@ -86,12 +125,28 @@ const Home = () => {
 		},
 		{
 			name: "Action",
-			cell: () => (
+			cell: (row: formEntryType) => (
 				<Stack spacing={1} direction="row">
-					<Fab size="small" color="primary" type="submit" sx={{ zIndex: 0 }}>
+					<Fab
+						size="small"
+						color="primary"
+						type="submit"
+						sx={{ zIndex: 0 }}
+						onClick={() => {
+							navigate("/forms/edit/" + row.id);
+						}}
+					>
 						<EditIcon />
 					</Fab>
-					<Fab size="small" sx={{ zIndex: 0 }}>
+					<Fab
+						size="small"
+						sx={{ zIndex: 0 }}
+						onClick={() => {
+							deleteFormEntry(Number(row.id));
+							const allFormEntries = getAllFormEntries();
+							setData(allFormEntries);
+						}}
+					>
 						<DeleteIcon />
 					</Fab>
 				</Stack>
@@ -122,29 +177,33 @@ const Home = () => {
 		},
 	};
 
-	const tableData = [
-		{
-			empty: "No Records to Display",
-		},
-	];
+	// const tableData = [
+	// 	{
+	// 		empty: "No Records to Display",
+	// 	},
+	// ];
+
+	console.log(data);
 
 	return (
-		<Stack direction="column" alignItems="center" spacing={4}>
+		<Stack
+			pt={3}
+			direction="column"
+			alignItems="center"
+			spacing={4}
+			minHeight="85vh"
+		>
 			<Typography fontWeight={700} color="rgb(60, 60, 60)" variant="h5">
 				Employee Management System
 			</Typography>
-			<Link to="/forms" style={{ position: "absolute", top: 10, right: 85 }}>
+			<Link to="/forms" style={{ position: "absolute", top: -10, right: 85 }}>
 				<Button variant="contained">Add new Employee</Button>
 			</Link>
-			<Box
-				boxShadow={query.isLoading ? 0 : 10}
-				borderRadius={5}
-				overflow="hidden"
-			>
-				{!query.isLoading ? (
+			<Box boxShadow={isLoading ? 0 : 10} borderRadius={5} overflow="hidden">
+				{!isLoading ? (
 					<DataTable
 						columns={columns}
-						data={query.data ? query.data : tableData}
+						data={data}
 						customStyles={customStyles}
 						responsive
 						fixedHeader

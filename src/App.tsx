@@ -7,6 +7,7 @@ import theme from "./theme";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "./components/home/Home";
+import AnimateMouseMovement from "./components/ui/AnimateMouseMovement";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
 		path: "/forms",
 		element: <HorizontalLinearStepper />,
 	},
+	{
+		path: "/forms/edit/:id",
+		element: <HorizontalLinearStepper />,
+	},
 ]);
 
 const App = () => {
@@ -35,7 +40,9 @@ const App = () => {
 			>
 				<StyledContainer sx={{ bgcolor: "secondary.main" }}>
 					<QueryClientProvider client={queryClient}>
-						<RouterProvider router={router} />
+						<AnimateMouseMovement>
+							<RouterProvider router={router} />
+						</AnimateMouseMovement>
 					</QueryClientProvider>
 				</StyledContainer>
 			</StyleSheetManager>

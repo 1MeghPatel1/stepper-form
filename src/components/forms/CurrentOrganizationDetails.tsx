@@ -8,6 +8,11 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/en-in";
 import dayjs from "dayjs";
+import {
+	editFormEntry,
+	getAllFormEntries,
+} from "../../services/localHostServices";
+import { useParams } from "react-router-dom";
 
 const StyledTextField = styled(TextField)({
 	width: `${pxToRem(500)}rem`,
@@ -20,25 +25,55 @@ const CurrentOrganizationDetails = ({
 	steps,
 	setData,
 	data,
-	handleDataSubmit,
-}: propsType & { handleDataSubmit: () => void }) => {
-	const handleNext = (values: FormikValues) => {
+	setIsForwardAnimation,
+}: propsType) => {
+	const params = useParams();
+
+	const handleNext = async (values: FormikValues) => {
 		const newData = {
 			...values,
 			appraisalDate: values.appraisalDate.format("YYYY-MM-DD"),
 			joiningDate: values.joiningDate.format("YYYY-MM-DD"),
 			currentCTC: Number(values.currentCTC),
 		} as currentOrganizationDetailsType;
-		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-		setData((data) => {
+
+		const newformData = { ...data, currentOrganizationDetails: newData };
+
+		await setData((data) => {
 			return { ...data, currentOrganizationDetails: newData };
 		});
-		console.log(data);
-		handleDataSubmit();
+
+		if (params.id) {
+			editFormEntry(Number(params.id), {
+				...data,
+				currentOrganizationDetails: newData,
+			});
+		} else {
+			const allFormEntries = getAllFormEntries();
+
+			console.log(newformData);
+
+			if (allFormEntries) {
+				allFormEntries.push({
+					id: allFormEntries.length + 1,
+					formData: newformData,
+				});
+				localStorage.setItem("allFormEntries", JSON.stringify(allFormEntries));
+			} else {
+				localStorage.setItem(
+					"allFormEntries",
+					JSON.stringify([{ id: 1, formData: newformData }])
+				);
+			}
+		}
+
+		setActiveStep((prevActiveStep) => prevActiveStep + 1);
+		setIsForwardAnimation(true);
 	};
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
+		setIsForwardAnimation(false);
 	};
 
 	const {

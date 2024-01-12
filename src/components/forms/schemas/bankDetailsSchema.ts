@@ -12,8 +12,8 @@ const validationSchema = yup.object().shape({
 		.string()
 		.required("Aadhar Card Number is Required")
 		.matches(
-			/^\d{10}$/,
-			"Invalid Aadhar Card Number It should be 10 digits Long"
+			/^\d{12}$/,
+			"Invalid Aadhar Card Number It should be 12 digits Long"
 		),
 	panNumber: yup
 		.string()
