@@ -2,7 +2,6 @@ import {
 	Box,
 	Button,
 	Checkbox,
-	Fab,
 	FormControlLabel,
 	Modal,
 	Stack,
@@ -111,12 +110,13 @@ const PersonalDetails = ({
 		onSubmit: handleNext,
 	});
 
+	const imgInput = document.querySelector("#imgInput") as HTMLInputElement;
+
 	const handleRemoveClick = () => {
 		setFieldValue("profileImage", null);
 		setImgUrl("");
+		imgInput.value = "";
 	};
-
-	const imgInput = document.querySelector("#imgInput") as HTMLInputElement;
 
 	return (
 		<Stack
@@ -270,21 +270,33 @@ const PersonalDetails = ({
 							>
 								{values?.profileImage?.name}
 							</Button>
-							<Fab
-								sx={{
+							<button
+								style={{
 									position: "absolute",
-									height: "5px",
-									width: "35px",
-									top: "-18px",
-									right: "-20px",
+									maxWidth: "1.8rem",
+									maxHeight: "1.8rem",
+									padding: "0.5rem",
+									display: "flex",
+									justifyContent: "center",
+									alignItems: "center",
+									top: "-15px",
+									right: "-15px",
+									borderRadius: "50%",
+									backgroundColor: "#CD6688",
 								}}
-								size="small"
-								color="primary"
 								aria-label="add"
 								onClick={handleRemoveClick}
 							>
-								<CloseIcon fontSize="medium" />
-							</Fab>
+								<CloseIcon
+									fontSize="medium"
+									sx={{
+										width: "1rem",
+										aspectRatio: "1/1",
+										padding: "0",
+										fill: "#FFF",
+									}}
+								/>
+							</button>
 						</Box>
 					)}
 				</Stack>

@@ -3,7 +3,6 @@ import {
 	Box,
 	Button,
 	Checkbox,
-	Fab,
 	Stack,
 	TextField,
 	Typography,
@@ -72,10 +71,6 @@ const ProfessionalDetails = ({
 		window.open(uploadedResumeUrl);
 	};
 
-	const handleRemoveClick = () => {
-		setFieldValue("uploadedResume", { name: "", src: "" });
-	};
-
 	const [uploadedResumeUrl, setuploadedResumeUrl] = useState("");
 
 	useEffect(() => {
@@ -129,6 +124,11 @@ const ProfessionalDetails = ({
 	const uploadedResumeInput = document.querySelector(
 		"#uploadedResumeInput"
 	) as HTMLInputElement;
+
+	const handleRemoveClick = () => {
+		setFieldValue("uploadedResume", { name: "", src: "" });
+		uploadedResumeInput.value = "";
+	};
 
 	return (
 		<Stack
@@ -331,21 +331,33 @@ const ProfessionalDetails = ({
 									>
 										{values?.uploadedResume?.name}
 									</Button>
-									<Fab
-										sx={{
+									<button
+										style={{
 											position: "absolute",
-											height: "5px",
-											width: "35px",
-											top: "-18px",
-											right: "-20px",
+											maxWidth: "1.8rem",
+											maxHeight: "1.8rem",
+											padding: "0.5rem",
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+											top: "-15px",
+											right: "-15px",
+											borderRadius: "50%",
+											backgroundColor: "#CD6688",
 										}}
-										size="small"
-										color="primary"
 										aria-label="add"
 										onClick={handleRemoveClick}
 									>
-										<CloseIcon fontSize="medium" />
-									</Fab>
+										<CloseIcon
+											fontSize="medium"
+											sx={{
+												width: "1rem",
+												aspectRatio: "1/1",
+												padding: "0",
+												fill: "#FFF",
+											}}
+										/>
+									</button>
 								</Box>
 							)}
 						</Stack>

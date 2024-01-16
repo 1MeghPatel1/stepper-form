@@ -36,7 +36,7 @@ const StyledLabel = styled(StepLabel)({
 });
 
 export default function HorizontalLinearStepper() {
-	const [activeStep, setActiveStep] = React.useState(0);
+	const [activeStep, setActiveStep] = React.useState(2);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [data, setData] = React.useState<initialSatateType>(initialState);
 	const [isForwardAnimation, setIsForwardAnimation] = React.useState(true);
