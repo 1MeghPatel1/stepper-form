@@ -1,4 +1,5 @@
 import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 type propsType = {
 	handleBack: () => void;
@@ -13,6 +14,8 @@ const NavigationButtons = ({
 	steps,
 	handleNext,
 }: propsType) => {
+	const navigate = useNavigate();
+
 	return (
 		<Box
 			sx={{
@@ -30,6 +33,9 @@ const NavigationButtons = ({
 				sx={{ mr: 1 }}
 			>
 				Back
+			</Button>
+			<Button color="inherit" variant="contained" onClick={() => navigate("/")}>
+				Back to List
 			</Button>
 			<Box sx={{ flex: "1 1 auto" }} />
 

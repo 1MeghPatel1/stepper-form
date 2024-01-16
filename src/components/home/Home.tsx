@@ -3,6 +3,7 @@ import {
 	Box,
 	Button,
 	Fab,
+	Modal,
 	Skeleton,
 	Stack,
 	Typography,
@@ -20,6 +21,14 @@ import {
 	formEntryType,
 	getAllFormEntries,
 } from "../../services/localHostServices";
+import styled from "styled-components";
+
+const StyledButton = styled(Fab)({
+	maxWidth: "3rem",
+	aspectRatio: "1/1",
+	padding: "0.5px",
+	borderRadius: "50%",
+});
 
 const Home = () => {
 	// const query = useQuery({
@@ -31,7 +40,25 @@ const Home = () => {
 	// console.log(query.data);
 	const [data, setData] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [open, setOpen] = useState(false);
+	const [imgUrl, setImgUrl] = useState("");
 	const navigate = useNavigate();
+
+	const handleResumeOpen = (uploadedResumeUrl: string) => {
+		if (uploadedResumeUrl) {
+			window.open(uploadedResumeUrl);
+		}
+	};
+	const handleImgOpen = (uploadedImgUrl: string) => {
+		setOpen(true);
+		if (uploadedImgUrl) {
+			setImgUrl(uploadedImgUrl);
+		}
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -53,14 +80,22 @@ const Home = () => {
 			cell: (row: formEntryType) => {
 				console.log(row);
 				return (
-					<Avatar
-						alt="Cindy Baker"
-						src={
-							row.formData.personalDetails.profileImage!.src
-								? row.formData.personalDetails.profileImage!.src
-								: ""
-						}
-					/>
+					<StyledButton
+						size="medium"
+						onClick={() => {
+							handleImgOpen(row.formData.personalDetails.profileImage!.src);
+						}}
+					>
+						<Avatar
+							sx={{ padding: "0", height: "100%", width: "100%" }}
+							alt="Cindy Baker"
+							src={
+								row.formData.personalDetails.profileImage!.src
+									? row.formData.personalDetails.profileImage!.src
+									: ""
+							}
+						/>
+					</StyledButton>
 				);
 			},
 			style: {
@@ -111,12 +146,17 @@ const Home = () => {
 			),
 		},
 		{
-			name: "uploadedResume",
-			cell: () => (
+			name: "Uploaded Resume",
+			cell: (row: formEntryType) => (
 				<Fab
 					variant="circular"
 					size="small"
 					sx={{ boxShadow: "none", zIndex: 0 }}
+					onClick={() =>
+						handleResumeOpen(
+							row.formData.professionalDetails.uploadedResume.src
+						)
+					}
 				>
 					<DescriptionIcon color="primary" />
 				</Fab>
@@ -238,6 +278,34 @@ const Home = () => {
 					</Stack>
 				)}
 			</Box>
+			<Modal
+				open={open}
+				sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+				onClose={handleClose}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box
+					sx={{
+						bgcolor: "#FFFFEC",
+						width: "60%",
+						height: "70%",
+						padding: "1rem",
+						borderRadius: "20px",
+					}}
+				>
+					<Typography variant="h4">Profile Picture</Typography>
+					<iframe
+						style={{
+							width: "100%",
+							height: "90%",
+							borderRadius: "20px",
+							border: "none",
+						}}
+						src={imgUrl}
+					></iframe>
+				</Box>
+			</Modal>
 		</Stack>
 	);
 };
