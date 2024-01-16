@@ -8,7 +8,7 @@ const validationSchema = yup.object().shape({
 	middleName: yup
 		.string()
 		.min(1, "Minimum length must be 1 letters")
-		.required("Middl Name is Required"),
+		.required("Middle Name is Required"),
 	lastName: yup
 		.string()
 		.min(2, "Minimum length must be 2 letters")
