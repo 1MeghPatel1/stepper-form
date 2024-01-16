@@ -31,6 +31,11 @@ export type bankDataType = {
 	panNumber: string;
 };
 
+export type resumeDataType = {
+	name: string;
+	src: "";
+};
+
 export type professionalDataType = {
 	designation: string;
 	department: string;
@@ -38,7 +43,7 @@ export type professionalDataType = {
 	currentLocation: string;
 	years: number | null;
 	months: number | null;
-	uploadedResume: null | File;
+	uploadedResume: resumeDataType;
 };
 
 export type EducationDataRow = {

@@ -17,7 +17,7 @@ import { professionalDataType, propsType } from "./types/types";
 import { useFormik } from "formik";
 import validationSchema from "./schemas/professionalDetailsSchema";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledTextField = styled(TextField)({
 	width: `${pxToRem(600)}rem`,
@@ -45,10 +45,13 @@ const ProfessionalDetails = ({
 	setIsForwardAnimation,
 	data,
 }: propsType) => {
+	console.log(data.professionalDetails);
 	const handleNext = (values: professionalDataType) => {
 		const newData = {
 			...values,
-			uploadedResume: values.uploadedResume || "",
+			uploadedResume: values.uploadedResume.name
+				? { name: values.uploadedResume.name, src: uploadedResumeUrl }
+				: { name: "", src: "" },
 		} as professionalDataType;
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 		setData((data) => {
@@ -70,10 +73,22 @@ const ProfessionalDetails = ({
 	};
 
 	const handleRemoveClick = () => {
-		setFieldValue("uploadedResume", null);
+		setFieldValue("uploadedResume", { name: "", src: "" });
 	};
 
 	const [uploadedResumeUrl, setuploadedResumeUrl] = useState("");
+
+	useEffect(() => {
+		if (
+			data.professionalDetails.uploadedResume?.name &&
+			data.professionalDetails.uploadedResume.src
+		) {
+			setuploadedResumeUrl(data.professionalDetails.uploadedResume.src);
+		}
+	}, [
+		data.professionalDetails.uploadedResume?.name,
+		data.professionalDetails.uploadedResume.src,
+	]);
 
 	const {
 		values,
@@ -105,7 +120,7 @@ const ProfessionalDetails = ({
 				: null,
 			uploadedResume: data.professionalDetails.uploadedResume
 				? data.professionalDetails.uploadedResume
-				: null,
+				: { name: "", src: "" },
 		},
 		validationSchema: validationSchema,
 		onSubmit: handleNext,
@@ -304,7 +319,7 @@ const ProfessionalDetails = ({
 									hidden
 								/>
 							</Button>
-							{values.uploadedResume && (
+							{values.uploadedResume.name && (
 								<Box sx={{ position: "relative", width: "max-content" }}>
 									<Button
 										variant="outlined"
